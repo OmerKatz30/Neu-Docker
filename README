@@ -1,0 +1,79 @@
+Python REST API with Pytest and Docker
+This project includes a Python-based REST API, a Docker container for deployment, and a comprehensive testing framework using pytest. The project is designed for reliable testing and deployment.
+
+Project Contents
+The project contains the following key components:
+
+app.py: The core Python Flask application.
+
+app_requirements.txt: A list of Python dependencies for the application.
+
+Dockerfile: This file defines the Docker image build process.
+
+tests/: This directory contains the testing framework.
+
+conftest.py: This file holds pytest fixtures that manage the Docker container lifecycle and provide a local Flask test client.
+
+test_api_docker.py: This test suite is designed to run against the Dockerized application.
+
+test_api_local.py: This is for quick local execution, running tests without a live server or Docker.
+
+Setup and Execution
+To begin, build and run the Docker container.
+
+Ensure you have Docker installed and running on your machine. For most developers on macOS and Windows, this means having Docker Desktop installed.
+
+Open your terminal and navigate to the project's root directory.
+
+Use this command to build the Docker image:
+
+docker build -t test-app:latest .
+
+Once the image is built, you can run the container:
+
+docker run -d -p 5000:5000 test-app:latest
+
+The -d flag runs the container in detached mode, and -p maps the container's port to the host machine's port.
+
+How to Run the Tests
+The project includes two testing methods to suit different development needs.
+
+Full Test Suite with Docker
+This method ensures the application is tested in a production-like environment.
+
+Ensure Docker is running.
+
+Install the required testing dependencies:
+
+pip install pytest docker pytest-requests
+
+From the project's root directory, execute this command to run the tests and generate a report:
+
+pytest tests/test_api_docker.py --junitxml=report.xml
+
+This command automatically builds the container, runs the tests against it, and then removes the container.
+
+Local Testing (Quick Debugging)
+This method is for rapid development and debugging, using a Flask test client without a live server or Docker.
+
+First, install the application's required dependencies and pytest:
+
+pip install -r app_requirements.txt pytest
+
+Then, just run this command from the project directory:
+
+pytest tests/test_api_local.py
+
+These tests can also be run directly from within an IDE like PyCharm by clicking the green "play" arrow next to the test functions.
+
+Expected Test Result
+A successful test run will show all tests passing, indicating that the application's APIs meet all functional requirements. The command-line output will look something like this:
+
+============================= test session starts ==============================
+collected 4 items
+
+tests/test_api_docker.py ....                                            [100%]
+
+============================== 4 passed in 10.00s ==============================
+
+If you ran the Docker tests, a report.xml file will also be created in the main project directory. It provides a detailed report of the test results.

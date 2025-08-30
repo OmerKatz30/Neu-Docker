@@ -5,11 +5,13 @@ app = Flask(__name__)
 
 last_reversed_string = None
 
+
 # A global error handler to catch unexpected exceptions.
 @app.errorhandler(Exception)
 def handle_unexpected_error(e):
     app.logger.error('An unexpected error occurred: %s', e)
     return jsonify({"error": "An internal server error occurred."}), 500
+
 
 @app.route("/reverse", methods=["GET"])
 def reverse_string():
@@ -22,12 +24,13 @@ def reverse_string():
     if not input_str:
         return jsonify({"error": "Input string cannot be empty"}), 400
 
-    words = re.findall(r'\S+', input_str)
+    words = input_str.split()
     reversed_words = reversed(words)
     result_str = " ".join(reversed_words)
 
     last_reversed_string = result_str
     return jsonify({"result": result_str})
+
 
 @app.route("/restore", methods=["GET"])
 def restore_string():
@@ -36,6 +39,7 @@ def restore_string():
         return jsonify({"error": "No previous result available"}), 404
     else:
         return jsonify({"result": last_reversed_string}), 200
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)

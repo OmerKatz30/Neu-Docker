@@ -1,73 +1,51 @@
 Python REST API with Pytest and Docker
-This project includes a Python-based REST API, a Docker container for deployment, and a comprehensive testing framework using pytest. The project is designed for reliable testing and deployment.
+This is a simple REST API built with Python and Flask. Its primary function is to reverse the order of words in a string. The API also includes a restore feature that returns the most recent reversed string.
 
-Project Contents
-The project contains the following key components:
+Getting Started
+To get this project up and running, follow these simple steps.
 
-app.py: The core Python Flask application.
+Install Docker Desktop: This is the only prerequisite. Make sure you have Docker Desktop installed and running on your machine.
 
-app_requirements.txt: A list of Python dependencies for the application.
+Open your terminal: Navigate to the root directory of this project.
 
-Dockerfile: This file defines the Docker image build process.
+Install Dependencies: The project uses two sets of dependencies: one for the application itself and another for the testing framework. You can install both with a single command:
 
-tests/: This directory contains the testing framework.
+pip install -r app_requirements.txt -r test_requirements.txt
 
-conftest.py: This file holds pytest fixtures that manage the Docker container lifecycle and provide a local Flask test client.
-
-test_api_docker.py: This test suite is designed to run against the Dockerized application.
-
-test_api_local.py: This is for quick local execution, running tests without a live server or Docker.
-
-Setup and Execution
-To begin, build and run the Docker container.
-
-Ensure you have Docker installed and running on your machine. For most developers on macOS and Windows, this means having Docker Desktop installed.
-
-Open your terminal and navigate to the project's root directory.
-
-Use this command to build the Docker image:
-
-docker build -t test-app:latest .
-
-Once the image is built, you can run the container:
-
-docker run -d -p 5000:5000 test-app:latest
-
-The -d flag runs the container in detached mode, and -p maps the container's port to the host machine's port.
-
-How to Run the Tests
-The project includes two testing methods to suit different development needs.
-
-Full Test Suite with Docker
-This method ensures the application is tested in a production-like environment.
-
-Ensure Docker is running.
-
-Install the required testing dependencies:
-
-pip install pytest docker pytest-requests
-
-From the project's root directory, execute this command to run the tests and generate a report:
+Run the Test Suite: This is the final step. Running the tests will automatically build the Docker container and execute all the tests against it.
 
 pytest tests/test_api_docker.py --junitxml=report.xml
 
-This command automatically builds the container, runs the tests against it, and then removes the container.
+Project Structure
+app.py: The core Flask application that handles the API endpoints.
 
-Local Testing (Quick Debugging)
-This method is for rapid development and debugging, using a Flask test client without a live server or Docker.
+app_requirements.txt: A list of the Python packages required for the application to run (e.g., Flask, gunicorn).
 
-First, install the application's required dependencies and pytest:
+test_requirements.txt: A list of the Python packages needed to run the test suites (e.g., pytest, docker).
 
-pip install -r app_requirements.txt pytest
+Dockerfile: Defines the process for building the Docker image for the application.
 
-Then, just run this command from the project directory:
+.gitignore: Specifies files and directories that should not be committed to Git (e.g., virtual environments, test reports).
 
-pytest tests/test_api_local.py
+tests/: This directory contains all the test files and supporting fixtures.
 
-These tests can also be run directly from within an IDE like PyCharm by clicking the green "play" arrow next to the test functions.
+conftest.py: Contains pytest fixtures for setting up the local test client and managing the Docker container's lifecycle during testing.
 
-Expected Test Result
-A successful test run will show all tests passing, indicating that the application's APIs meet all functional requirements. The command-line output will look something like this:
+test_api_docker.py: The test suite that runs against the Dockerized API.
+
+test_api_local.py: The test suite that runs directly against the application in your local environment without Docker.
+
+API Endpoints
+The application provides the following endpoints:
+
+GET /reverse?in=<string>: Reverses the order of words in the given input string.
+
+GET /restore: Returns the most recently reversed string.
+
+Successful Test Result
+A successful test run confirms that both the application and the Docker container are working correctly.
+
+The terminal output will show that all tests have passed:
 
 ============================= test session starts ==============================
 collected 4 items
@@ -76,4 +54,4 @@ tests/test_api_docker.py ....                                            [100%]
 
 ============================== 4 passed in 10.00s ==============================
 
-If you ran the Docker tests, a report.xml file will also be created in the main project directory. It provides a detailed report of the test results.
+Additionally, because the --junitxml=report.xml flag was used, a report.xml file will be created in the root directory. This file is a JUnit XML report of the test results, which can be used by continuous integration (CI) tools.
